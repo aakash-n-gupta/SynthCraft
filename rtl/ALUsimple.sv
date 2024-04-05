@@ -17,7 +17,6 @@ typedef enum logic [3:0] {
             NEG  =  4'b1100
     } aluop_t;
 
-
 module ALUsimple #(parameter WIDTH = 16) (
     input logic [WIDTH-1:0] rs1,
     input logic [WIDTH-1:0] rs2,
@@ -32,6 +31,7 @@ module ALUsimple #(parameter WIDTH = 16) (
 
     logic [WIDTH:0] alu_result;
 
+    assign rd = alu_result[WIDTH-1:0];
 
     always_comb begin
         if (resetn)
@@ -42,21 +42,58 @@ module ALUsimple #(parameter WIDTH = 16) (
         else
         begin
             alu_result = '0;
-            flag = {1'b0, alu_result[WIDTH], alu_result[WIDTH]};
+            flag = '0;
             case (aluop_in)
-                ADD : alu_result             = rs1 + rs2;
-                SUB : alu_result             = rs1 - rs2;
-                AND : alu_result [WIDTH-1:0] = rs1 & rs2;
-                SLL : alu_result [WIDTH-1:0] = rs1 << rs2 [WIDTH/4 -1: 0]; // for 16-bit ALU
-                SRL : alu_result [WIDTH-1:0] = rs1 >> rs2 [WIDTH/4 -1: 0]; // for 16-bit ALU
-                SRA : alu_result [WIDTH-1:0] = rs1 >>> rs2 [WIDTH/4 -1: 0]; // for 16-bit ALU
-                SLT : alu_result             = rs1 - rs1; // if b > a MSB of alu_result will be 1
-                SLTU: alu_result             = (rs1 < rs2) ? 1 : 0; // setting only LSB??
+                ADD : begin
+                    alu_result              = rs1 + rs2;
+                    flag                    = {1'b0, alu_result[WIDTH], 1'b0};
+                end
+                SUB : begin
+                    alu_result              = rs1 - rs2;
+                    flag                    = {1'b0, 1'b0, alu_result[WIDTH]};
+                end
+                AND : begin
+                    alu_result [WIDTH-1:0]  = {1'b0, rs1 & rs2};
+                    flag                    = '0;
+                end
+                SLL : begin
+                    alu_result [WIDTH-1:0]  = rs1 << rs2 [WIDTH/4 -1: 0]; // for 16-bit ALU
+                    flag                    = '0;
+                end
+                SRL : begin
+                    alu_result  [WIDTH-1:0] = rs1 >> rs2 [WIDTH/4 -1: 0]; // for 16-bit ALU
+                    flag                    = '0;
+                end
+                SRA : begin
+                    alu_result  [WIDTH-1:0] = rs1 >>> rs2 [WIDTH/4 -1: 0]; // for 16-bit ALU
+                    flag                    = '0;
+                end
+                SLT : begin
+                     // if rs1 > rs2 MSB of alu_result will be 1
+                    alu_result              = ($signed(rs1) < $signed(rs2)) ? 1: 0;
+                    flag                    = {1'b0, 1'b0, alu_result[WIDTH]};
+                end
+                SLTU: begin
+                    alu_result              = (rs1 < rs2) ? 1 : 0; // setting only LSB??
+                    flag                    = '0;
+                end
                 // if 8th bit of rs1 is 1, the number is signed, so we extend 1 else 0
-                SEXT: alu_result             = (rs1[WIDTH/2 - 1]) ? {9'b11111_1111, rs1[WIDTH/2 - 1:0]} : {9'b0, rs1[WIDTH/2 - 1:0]};
-                ZEXT: alu_result             = {9'b0, rs1[WIDTH/2 - 1:0]}; // zero-extend
-                XOR : alu_result [WIDTH-1:0] = rs1 ^ rs2;
-                NEG : alu_result [WIDTH-1:0] = -(rs1); // will this work in syntesys?
+                SEXT: begin
+                    alu_result              = (rs1[WIDTH/2 - 1]) ? {9'b11111_1111, rs1[WIDTH/2 - 1:0]} : {9'b0, rs1[WIDTH/2 - 1:0]};
+                    flag                    = '0;
+                end
+                ZEXT: begin
+                    alu_result              = {9'b0, rs1[WIDTH/2 - 1:0]}; // zero-extend
+                    flag                    = '0;
+                end
+                XOR : begin
+                    alu_result  [WIDTH-1:0] = rs1 ^ rs2;
+                    flag                    = '0;
+                end
+                NEG : begin
+                    alu_result  [WIDTH-1:0] = -(rs1); // will this work in syntesys?
+                    flag                    = '0;
+                end
                 default: begin
                     alu_result = 'Z; // ILLEGAL opcode
                     flag = 3'b100; // SET ILLEGAL flag
@@ -64,7 +101,5 @@ module ALUsimple #(parameter WIDTH = 16) (
             endcase
         end
     end
-
-    assign rd = alu_result[WIDTH-1:0];
 
 endmodule

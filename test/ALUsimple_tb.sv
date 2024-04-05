@@ -120,11 +120,11 @@ enum logic [3:0] {
         repeat (100)
         begin
             // ADD
-            rs1 = $urandom % (2**(WIDTH-1));
-            rs2 = $urandom % (2**(WIDTH-1));
+            rs1 = $urandom % (2**(WIDTH));
+            rs2 = $urandom % (2**(WIDTH));
             aluop_v = ADD;
             #10;
-            if((result != rs1 + rs2)) begin
+            if(!(result == (rs1 + rs2))) begin
                 $display("Test ADD: Fail | Result is %d", result);
             end
         end
@@ -149,8 +149,15 @@ enum logic [3:0] {
             rs2 = $urandom % (2**WIDTH);
             aluop_v = AND;
             #10;
-            if(result != rs1 & rs2)
+          if((result != (rs1 & rs2))) begin
                 $display("Test AND: Failed");
+                $display("rs1       : %b", rs1);
+                $display("rs2       : %b", rs2);
+                $display("result is : %b", result);
+            	$display("should be : %b", (rs1 & rs2));
+                $display("");
+
+          end
         end
         $display("Test AND: 100 cycles passed!");
 
@@ -190,20 +197,30 @@ enum logic [3:0] {
         end
         $display("Test SRA: 50 cycles passed!");
 
+        // Mid test reset
+        resetn = 1;
+        #20;
+        resetn = '0;
+
         repeat (100)
         begin
-            // SLT bitwise
-            rs1 = $urandom % (2**WIDTH);
-            rs2 = $urandom % (2**WIDTH);
+            // SLT bitwise, cases when input rs2 is smaller
+            rs1 = $urandom % (2**(WIDTH)); // this will always be +ve
+            rs2 = $urandom % (2**(WIDTH)); // this will be +ve and less than rs1
             aluop_v = SLT;
             #10;
-            if(! ((signed_rs2 > signed_rs1) && (result == 1)) )
+          if(($signed(rs1) > $signed(rs1)) && (result == 1)) begin
                 $display("Test SLT: Failed");
-            if (! ((signed_rs2 < signed_rs1) && (result == 0)) )
-                $display("Test SLT: Failed");
+                $display("RS1 %d", $signed(rs1));
+                $display("RS2 %d", $signed(rs2));
+          end
         end
         $display("Test SLT: 100 cycles passed!");
 
+        // Mid test reset
+        resetn = 1;
+        #20;
+        resetn = '0;
 
         repeat (100)
         begin
@@ -212,9 +229,9 @@ enum logic [3:0] {
             rs2 = $urandom % (2**WIDTH);
             aluop_v = SLTU;
             #10;
-            if(! ((rs2 > rs1) && (result == 1)) )
+            if( (!(rs2 > rs1) && (result == 1)) )
                 $display("Test SLTU: Failed");
-            if (! ((rs2 < rs1) && (result == 0)) )
+            if ( (!(rs2 < rs1) && (result == 0)) )
                 $display("Test SLTU: Failed");
         end
         $display("Test SLTU: 100 cycles passed!");
@@ -261,12 +278,12 @@ enum logic [3:0] {
             rs2 = $urandom % (2**WIDTH);
             aluop_v = XOR;
             #10;
-            if((result != rs1 ^ rs2)) begin
+            if(! (result == (rs1 ^ rs2))) begin
                 $display("Test XOR: Failed");
-                $display("%d",rs1);
-                $display("%d",rs2);
-                $display("%d",result);
-                display("");
+                $display("%b",rs1);
+                $display("%b",rs2);
+                $display("%b",result);
+                $display("");
             end
         end
         $display("Test XOR: 100 cycles passed!");
