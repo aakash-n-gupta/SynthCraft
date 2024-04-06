@@ -3,7 +3,7 @@
 module MTime_Interrupter_tb;
 
     // Parameters
-    parameter XLEN = 8;
+    parameter int XLEN = 32;
     int errors = 0;
     int cycles = 0;
 

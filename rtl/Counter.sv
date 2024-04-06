@@ -1,7 +1,7 @@
 `timescale 1ns / 1ps
 
 
-module Counter #(parameter WIDTH = 8) (
+module Counter #(parameter int WIDTH = 8) (
     input logic                 clock,
     output logic [WIDTH-1:0]    count = '0
 );

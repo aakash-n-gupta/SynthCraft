@@ -3,7 +3,7 @@
 module Counter_tb;
 
     // Parameters
-    parameter WIDTH = 8;
+    parameter int WIDTH = 8;
     int errors = 0;
     int cycles = 0;
 

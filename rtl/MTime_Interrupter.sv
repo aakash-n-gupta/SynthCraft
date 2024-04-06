@@ -62,7 +62,7 @@ always_ff @(posedge clock) begin
 
 // set interrupt when mtime runs over
     always_comb begin
-        if ((mtime_reg >= mtimecmp_reg)) 
+        if ((mtime_reg >= mtimecmp_reg))
             interrupt = '1;
         else
             interrupt = '0;

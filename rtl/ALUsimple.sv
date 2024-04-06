@@ -17,7 +17,7 @@ typedef enum logic [3:0] {
             NEG  =  4'b1100
     } aluop_t;
 
-module ALUsimple #(parameter WIDTH = 16) (
+module ALUsimple #(parameter int WIDTH = 16) (
     input logic [WIDTH-1:0] rs1,
     input logic [WIDTH-1:0] rs2,
     input aluop_t           aluop_in,
@@ -79,7 +79,8 @@ module ALUsimple #(parameter WIDTH = 16) (
                 end
                 // if 8th bit of rs1 is 1, the number is signed, so we extend 1 else 0
                 SEXT: begin
-                    alu_result              = (rs1[WIDTH/2 - 1]) ? {9'b11111_1111, rs1[WIDTH/2 - 1:0]} : {9'b0, rs1[WIDTH/2 - 1:0]};
+                    alu_result              = (rs1[WIDTH/2 - 1]) ?
+                    {9'b11111_1111, rs1[WIDTH/2 - 1:0]} : {9'b0, rs1[WIDTH/2 - 1:0]};
                     flag                    = '0;
                 end
                 ZEXT: begin

@@ -3,7 +3,7 @@
 module Adder_tb;
 
     // Parameters
-    parameter WIDTH = 8;
+    parameter int WIDTH = 8;
 
     // Inputs
     logic [WIDTH-1:0] in_a;
@@ -57,7 +57,7 @@ module Adder_tb;
             begin
                 $display("Error: Unexpected result at time %0t", $time);
                 $display("in_a = %d, in_b = %d, cin = %b", in_a, in_b, cin);
-                $display("Expected: sum = %d ", in_a + in_b + cin, (in_a + in_b + cin > ((2**WIDTH)-1)));
+                $display("Expected: sum = %d ", in_a+in_b+cin, (in_a+in_b+cin > ((2**WIDTH)-1)));
                 $display("Actual: sum = %d ", sum);
             end
             // Manual Edge case tests

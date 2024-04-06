@@ -2,7 +2,7 @@
 
 // Adder Module
 
-module Adder #(parameter WIDTH = 8) (
+module Adder #(parameter int WIDTH = 8) (
     input logic [WIDTH-1:0] in_a,
     input logic [WIDTH-1:0] in_b,
     input logic             cin,

@@ -3,12 +3,12 @@
 module ALUsimple_tb;
 
     // Parameters
-    parameter WIDTH = 16;
-    parameter logWIDTH = $clog2(WIDTH);
+    parameter int WIDTH = 16;
+    parameter int LogWIDTH = $clog2(WIDTH);
     int errors = 0;
     int cycles = 0;
 
-enum logic [3:0] {
+typedef enum logic [3:0] {
             ADD  =  4'b0001,
             SUB  =  4'b0010,
             AND  =  4'b0011,
@@ -21,9 +21,7 @@ enum logic [3:0] {
             ZEXT =  4'b1010,
             XOR  =  4'b1011,
             NEG  =  4'b1100
-} aluops;
-
-    // aluop_t aluop_v;
+} aluop_t;
 
     // Inputs
     logic             resetn;
@@ -154,7 +152,7 @@ enum logic [3:0] {
                 $display("rs1       : %b", rs1);
                 $display("rs2       : %b", rs2);
                 $display("result is : %b", result);
-            	$display("should be : %b", (rs1 & rs2));
+                $display("should be : %b", (rs1 & rs2));
                 $display("");
 
           end
@@ -168,7 +166,7 @@ enum logic [3:0] {
             rs2 = $urandom % WIDTH; // max shamt will be log2(WIDTH)
             aluop_v = SLL;
             #10;
-            if(result != rs1 << rs2[logWIDTH-1:0])
+            if(result != rs1 << rs2[LogWIDTH-1:0])
                 $display("Test SLL: Failed");
         end
         $display("Test SSL: 10 cycles passed!");
@@ -180,7 +178,7 @@ enum logic [3:0] {
             rs2 = $urandom % WIDTH; // max shamt will be log2(WIDTH)
             aluop_v = SRL;
             #10;
-            if(result != rs1 >> rs2[logWIDTH-1:0])
+            if(result != rs1 >> rs2[LogWIDTH-1:0])
                 $display("Test SRL: Failed");
         end
         $display("Test SRL: 10 cycles passed!");
@@ -192,7 +190,7 @@ enum logic [3:0] {
             rs2 = $urandom % (2**WIDTH);
             aluop_v = SRA;
             #10;
-            if(result != rs1 >>> rs2[logWIDTH-1:0])
+            if(result != rs1 >>> rs2[LogWIDTH-1:0])
                 $display("Test SRA: Failed");
         end
         $display("Test SRA: 50 cycles passed!");
