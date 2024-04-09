@@ -3,7 +3,8 @@ SRC_DIR := rtl
 TEST_DIR := test
 BUILD_DIR := build
 OUTPUT := output
-TARGET ?= Adder
+GTKW := gtkw
+TARGET ?= FIFO
 
 # List of Verilog source files
 SOURCES := $(wildcard $(SRC_DIR)/$(TARGET).sv)
@@ -14,32 +15,31 @@ VCD := $(OUTPUT)/$(TARGET).vcd
 
 # Verilog compiler
 VERILOG := iverilog
-VERILOG_FLAGS += -g2005-sv -Wall
+VERILOG_FLAGS += -g2012 -Wall
 
 # Linting tool
 # VERILATOR_ROOT = ~/opt/verilator
-VERILATOR := /bin/verilator
+VERILATOR := verilator
 
 # Flags for verilator
 VERILATOR_FLAGS := --lint-only -Wall
 
 # Compile target
-compile: $(BUILD_DIR)/$(TARGET)
+compile: $(SOURCES) $(BUILD_DIR)/$(TARGET)
 
 # Rule to create binary
 $(BUILD_DIR)/$(TARGET): $(SOURCES) | $(BUILD_DIR)
 	$(VERILOG) $(VERILOG_FLAGS) -o $@ $(SOURCES) $(TESTS)
 
 # Rule to run lint
-lint:
+lint: $(SOURCES)
 	$(VERILATOR) $(VERILATOR_FLAGS) $(SOURCES)
 
-run: 
+run: compile $(SOURCES) $(BUILD_DIR)/$(TARGET)
 	$(BUILD_DIR)/$(TARGET)
 
-# Rule to create build directory
-$(BUILD_DIR):
-	mkdir -p $(BUILD_DIR)
+waves: compile run $(OUTPUT)/$(TARGET).vcd
+	gtkwave --dark $(OUTPUT)/$(TARGET).vcd $(GTKW)/$(TARGET).gtkw
 
 # Rule to clean generated files
 clean:

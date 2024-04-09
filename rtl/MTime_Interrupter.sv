@@ -1,18 +1,5 @@
 `timescale 1ns / 10ps
 
-// module clock_prescalar (
-//     input       clk,
-//     input [8:0] prescalar,
-//     output prescalar_clk
-// );
-//     logic [8:0] prescalar_reg;
-
-//     always_ff @(posedge clk)
-//     begin
-//         prescalar_reg <= prescalar_reg + 1;
-//     end
-// endmodule
-
 module MTime_Interrupter #(parameter int XLEN = 32) (
     // Inputs
     input           clock,
