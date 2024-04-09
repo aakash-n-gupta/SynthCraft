@@ -1,0 +1,38 @@
+[*]
+[*] GTKWave Analyzer v3.3.118 (w)1999-2023 BSI
+[*] Mon Apr  8 18:43:38 2024
+[*]
+[dumpfile] "/home/ang/work/SynthCraft/output/FIFO.vcd"
+[dumpfile_mtime] "Mon Apr  8 18:42:07 2024"
+[dumpfile_size] 73700
+[savefile] "/home/ang/work/SynthCraft/gtkw/FIFO.gtkw"
+[timestart] 958
+[size] 1920 1121
+[pos] -1 -1
+*-4.000000 3007 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] FIFO_tb.
+[sst_width] 273
+[signals_width] 225
+[sst_expanded] 1
+[sst_vpaned_height] 321
+@28
+FIFO_tb.clock
+FIFO_tb.resetn
+FIFO_tb.wr_en
+@24
+FIFO_tb.s_fifo.wr_ptr[8:0]
+@22
+FIFO_tb.data_in[31:0]
+@28
+FIFO_tb.rd_en
+@24
+FIFO_tb.s_fifo.rd_ptr[8:0]
+@22
+FIFO_tb.data_out[31:0]
+@28
+FIFO_tb.s_fifo.full
+FIFO_tb.empty
+@24
+FIFO_tb.s_fifo.counter[8:0]
+[pattern_trace] 1
+[pattern_trace] 0
