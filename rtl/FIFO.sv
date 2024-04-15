@@ -1,6 +1,6 @@
 `timescale 1ns / 1ns
 
-module FIFO #(parameter int DEPTH = 1024) (
+module FIFO #(parameter int DEPTH = 128) (
     input clock,
     input resetn,
     input wr_en,
@@ -12,6 +12,7 @@ module FIFO #(parameter int DEPTH = 1024) (
     output logic [31:0] data);
 
     logic [31:0] fifo [DEPTH];
+    // mem [31:0] fifo[DEPTH];
     logic [31:0] data_read_out;
 
     // Keep track of fifo
@@ -25,7 +26,6 @@ module FIFO #(parameter int DEPTH = 1024) (
         if (!resetn) begin
             // FIFO will be reset, data will not be available
             counter <= '0;
-            rd_ptr <= '0;
             wr_ptr <= '0;
         end
         else begin
@@ -70,12 +70,30 @@ module FIFO #(parameter int DEPTH = 1024) (
     // Pop data from FIFO head
     always_ff @(posedge clock)
     begin
+        if (!resetn)
+            rd_ptr <= '0;
+
         rd_ptr <= '0;
         data_read_out <= '0;
         if (!empty && rd_en) begin
+
             data_read_out <= fifo[rd_ptr];
-            // fifo[rd_ptr] <= fifo[rd_ptr + 1];
+
+            // need to test this in synthesis,
+            // Commenting out the line below does not affect the fuctionality of the design,
+            // but if the read is implicitly not from the HEAD, is it really a fifo?
+            // I suspect, when the data is not moved up the fifo, a decoder will be needed
+            // which will access the fifo as a memory
+
+            fifo[rd_ptr] <= fifo[rd_ptr + 1];
             rd_ptr <= rd_ptr + 1;
+
+
+            // To get an actual fifo, for loop should be used:
+        //     for (int i = 0; i < DEPTH; i++) begin
+        //         fifo[i] <= fifo[i+1];
+        //     end
+        //     data_read_out <= fifo[0];
         end
     end
 
@@ -83,6 +101,6 @@ module FIFO #(parameter int DEPTH = 1024) (
     assign full     = (counter == '1);
     assign empty    = (counter == '0);
 
-    assign data = data_read_out;
+    assign data = rd_en ? data_read_out: 'Z;
 
 endmodule

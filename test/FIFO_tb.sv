@@ -3,7 +3,7 @@
 module FIFO_tb;
 
   parameter DATA_WIDTH = 32;
-  parameter MAX = 1024;
+  parameter MAX = 128;
 
   logic clock, resetn;
   logic wr_en, rd_en;
@@ -14,7 +14,7 @@ module FIFO_tb;
   // Queue to push data_in
   logic [DATA_WIDTH-1:0] wdata_q[$], wdata;
 
-  FIFO #(.DEPTH(1024)) s_fifo
+  FIFO #(.DEPTH(MAX)) s_fifo
                 (clock,
                 resetn,
                 wr_en,
@@ -88,13 +88,13 @@ module FIFO_tb;
     data_in = '0;
     #100;
     $display("--------------------------------");
-    $display("TEST1: Fill fifo to 127");
-    push(1023);
-    $display("Pushed 127 words into FIFO");
+    $display("TEST1: Fill fifo to %d", MAX);
+    push(MAX+1);
+    $display("Pushed %d words into FIFO", MAX);
     $display("Starting to read data from fifo");
-    pop(1023);
+    pop(MAX+1);
     $display("--------------------------------");
-    $display("TEST1: Fill fifo to 127 Complete");
+    $display("TEST1: Fill fifo to %d Complete", MAX);
 
 
     // Test reset\
@@ -108,11 +108,11 @@ module FIFO_tb;
     $display("");
     $display("--------------------------------");
     $display("TEST3: fifo Overflow");
-    $display("Push 1030 words into FIFO");
-    push(1030);
+    $display("Push %d words into FIFO", (MAX+5));
+    push(MAX+5);
     // $display("Overflow FIFO");
     $display("Starting to read data from fifo, after overflow");
-    pop(1023);
+    pop(MAX+5);
     $display("--------------------------------");
     $display("TEST3: fifo Overflow completed");
 

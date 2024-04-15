@@ -20,3 +20,35 @@ SOLVED: Needed to add condition in counter to not modify state when FIFO is full
 One more thing seen in the logs, which were printed out, is that? It does not. The the FIFO does not state that it has been overflown. So, it might also be an issue with the test bench. 
 
 More investigation is needed into this. 
+
+Running ASIC flow on ORFS,
+
+## For the design with the for loop, the following characterstics are obtained:
+
+==========================================================================
+finish report_design_area
+--------------------------------------------------------------------------
+Design area 37352 u^2 21% utilization.
+
+==========================================================================
+global route report_design_area
+--------------------------------------------------------------------------
+Design area 37352 u^2 21% utilization.
+[INFO FLW-0007] clock clock period 4.000000
+[INFO FLW-0008] Clock clock period 0.991
+[INFO FLW-0009] Clock clock slack 2.957
+
+
+## for design with rd_prt counter
+==========================================================================
+finish report_design_area
+--------------------------------------------------------------------------
+Design area 54675 u^2 22% utilization.
+
+==========================================================================
+global route report_design_area
+--------------------------------------------------------------------------
+Design area 54675 u^2 22% utilization.
+[INFO FLW-0007] clock clock period 4.000000
+[INFO FLW-0008] Clock clock period 2.101
+[INFO FLW-0009] Clock clock slack 1.788
