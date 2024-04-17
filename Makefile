@@ -41,6 +41,9 @@ run: compile $(SOURCES) $(BUILD_DIR)/$(TARGET)
 waves: compile run $(OUTPUT)/$(TARGET).vcd
 	gtkwave --dark $(OUTPUT)/$(TARGET).vcd $(GTKW)/$(TARGET).gtkw
 
+synth: $(SOURCES)
+	yosys -s scripts/synth.ys
+
 # Rule to clean generated files
 clean:
 	rm -rf $(BUILD_DIR)/$(TARGET) $(OUTPUT)/$(TARGET).vcd
