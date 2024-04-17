@@ -21,7 +21,7 @@ module MTime_Interrupter_tb;
     logic clk = 0;
     always #5 clk = ~clk;
 
-    // Instantiate Adder module
+    // Instantiate MTIME module
     MTime_Interrupter #(XLEN) MTIME (
         .clock(clk),
         .mtie(mtie),
