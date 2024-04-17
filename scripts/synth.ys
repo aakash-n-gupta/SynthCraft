@@ -1,0 +1,25 @@
+# Load Verilog source files
+read_verilog -sv ./rtl/FIFO.sv
+
+# (Optional) Specify the top module
+hierarchy -top FIFO
+
+proc
+
+# Generate JSON file for design
+write_json ./synth/fifo.json
+
+# (Optional) Set synthesis directives or optimizations
+# Example:
+opt -fast
+opt_clean
+
+# Perform synthesis
+synth -top FIFO
+
+# (Optional) Perform additional optimizations
+# Example:
+opt
+
+# Write synthesized design to output file
+write_verilog -noattr -noexpr ./synth/synth_fifo.v
