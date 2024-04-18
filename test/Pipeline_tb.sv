@@ -4,6 +4,8 @@ module Pipeline_tb;
 
   parameter XLEN = 32;
 
+  int push = 0;
+
   logic rstn;
   logic stall;
   logic [XLEN-1:0] data_in;
@@ -30,13 +32,21 @@ module Pipeline_tb;
   task test_output(int TEST_CYCLES);
 
     $display("Starting Test: %d cycles", TEST_CYCLES);
-    for (int i = 0; i < 4; i++ ) begin
+    push = 0;
+    rstn = '1;
+    for (int i = 0; i < TEST_CYCLES; i++) begin
       data_in = $urandom;
-      data_pipeline[i] = data_in;
+      data_pipeline.push_back(data_in);
+      push++;
       #10;
       // data pushed in every cycle
       // compare output data with data_in from 4 cycles ago
-  end
+      // pop data from 4th cycle onwards
+      if (push > 3) begin
+        if(!(data_out == data_pipeline.pop_front()))
+          $display("Test Failed");
+      end
+    end
   endtask
 
   initial begin
@@ -55,56 +65,23 @@ module Pipeline_tb;
 
     $display("Start Test");
 
-    // Test manual inputs
-    // #10;
-    // data_in = 32'hdeadbeef;
-    // #10;
-
-    // data_in = 32'h12345678;
-    // #10;
-
-    // data_in = 32'h98765432;
-    // #10;
-
-    // data_in = 32'hcafebabe;
-    // #10;
-    // if(!(data_out == 32'hdeadbeef))
-    //   $display("Test Failed! Actual Output = %d", data_out);
-
-    // data_in = 32'hdecafbad;
-    // #10;
-    // if(!(data_out == 32'h12345678))
-    //   $display("Test Failed! Actual Output = %d", data_out);
-
-    // data_in = 32'hbabafafa;
-    // #10;
-    // if(!(data_out == 32'h98765432))
-    //   $display("Test Failed! Actual Output = %d", data_out);
-
-    // data_in = 32'hcabfaced;
-    // #10;
-    // if(!(data_out == 32'hcafebabe))
-    //   $display("Test Failed! Actual Output = %d", data_out);
-
-    // data_in = 32'hdeafaced;
-    // #10;
-    // if(!(data_out == 32'hdecafbad))
-    //   $display("Test Failed! Actual Output = %d", data_out);
-
-    // #10;
-    // if(!(data_out == 32'hbabafafa))
-    //   $display("Test Failed! Actual Output = %d", data_out);
-
-    // #10;
-    // if(!(data_out == 32'hcabfaced))
-    //   $display("Test Failed! Actual Output = %d", data_out);
-
-    // #10;
-    // if(!(data_out == 32'hdeafaced))
-    //   $display("Test Failed! Actual Output = %d", data_out);
-
     #10;
     test_output(100);
+
+    // Test reset
+    #9;
+    rstn = '0;
+    #10;
+    test_output(10);
+    #10;
+
+    // Test Stall
+    stall = '1;
+    #10;
+    test_output(10);
+    stall = '0;
+    test_output(20);
+
 
     #100;
     $display("Pipeline Module Test Completed");
