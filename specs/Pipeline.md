@@ -17,3 +17,14 @@ On reset, the pipeline registers will be flushed.
 
 If the stall signal is asserted, the registers will stop IO operations
 and stage registers will retain the values.
+
+## What happens when stall is deasserted?
+
+It is interesting to note the behavour modeled here.
+
+When stall is asserted, the pipeline registers already have their values (input values from previous cycles),
+when the stall is de-asserted the old values already stored in the pipeline are first outputed then new input 
+values are registered into the pipeline, after the first posedge after stall is deasserted.
+
+In case of a processor pipeline, when the datapath needs to stall, the input data is also expected to stop.
+Here, since there is no wrapper to control input data, the design ignores the input data and does not register it.

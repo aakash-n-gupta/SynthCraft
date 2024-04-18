@@ -51,7 +51,6 @@ module Pipeline_tb;
 
   initial begin
 
-
     $dumpfile("output/Pipeline.vcd");
     $dumpvars(0, Pipeline_tb);
 
@@ -82,8 +81,8 @@ module Pipeline_tb;
     stall = '0;
     test_output(20);
 
-
-    #100;
+    #20;
+    test_output(10);
     $display("Pipeline Module Test Completed");
     $finish;
   end

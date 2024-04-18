@@ -25,7 +25,7 @@ module Pipeline #(parameter int XLEN = 32)
         end
         else
         begin
-            data_stage0 <= data_in;
+            data_stage0 <= data_stage0;
             if (!stall)
                 data_stage0 <= data_in;
         end
