@@ -1,0 +1,34 @@
+[*]
+[*] GTKWave Analyzer v3.4.0 (w)1999-2022 BSI
+[*] Sun Apr 28 10:10:46 2024
+[*]
+[dumpfile] "/home/ang/work/SynthCraft/output/Memory.vcd"
+[dumpfile_mtime] "Sun Apr 28 10:06:31 2024"
+[dumpfile_size] 32101
+[savefile] "/home/ang/work/SynthCraft/gtkw/Memory.gtkw"
+[timestart] 2281
+[size] 2343 600
+[pos] -82 201
+*-5.000000 -1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+[treeopen] Memory_tb.
+[sst_width] 273
+[signals_width] 150
+[sst_expanded] 1
+[sst_vpaned_height] 148
+@28
+Memory_tb.clock
+Memory_tb.aresetn
+Memory_tb.rw_en
+@25
+Memory_tb.address_in[7:0]
+@22
+Memory_tb.data_in[31:0]
+@28
+Memory_tb.out_valid
+@22
+Memory_tb.data_out[31:0]
+Memory_tb.Mem.data[31:0]
+@28
+Memory_tb.Mem.valid
+[pattern_trace] 1
+[pattern_trace] 0
