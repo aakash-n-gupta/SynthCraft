@@ -4,7 +4,7 @@ TEST_DIR := test
 BUILD_DIR := build
 OUTPUT := output
 GTKW := gtkw
-TARGET ?= FIFO
+TARGET ?= Memory
 
 # List of Verilog source files
 SOURCES := $(wildcard $(SRC_DIR)/$(TARGET).sv)
@@ -36,12 +36,12 @@ lint: $(SOURCES)
 	$(VERILATOR) $(VERILATOR_FLAGS) $(SOURCES)
 
 run: compile $(SOURCES) $(BUILD_DIR)/$(TARGET)
-	$(BUILD_DIR)/$(TARGET)
+	./$(BUILD_DIR)/$(TARGET)
 
 waves: compile run $(OUTPUT)/$(TARGET).vcd
 	gtkwave --dark $(OUTPUT)/$(TARGET).vcd $(GTKW)/$(TARGET).gtkw
 
-synth: $(SOURCES)
+synth: $(TARGET) 
 	yosys -s scripts/synth.ys
 
 # Rule to clean generated files
@@ -49,6 +49,6 @@ clean:
 	rm -rf $(BUILD_DIR)/$(TARGET) $(OUTPUT)/$(TARGET).vcd
 
 clean-all:
-	rm -rf $(BUILD_DIR)/* $(OUTPUT)/*.vcd
+	rm -rf $(BUILD_DIR)/* $(OUTPUT)/*.vcd obj_dir/
 
 .PHONY: compile lint clean run
